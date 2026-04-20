@@ -1,45 +1,38 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { login } from "../utils/auth";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const router = useRouter();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      setMessage("Tous les champs sont requis");
+    if (!email.includes("@")) {
+      setMessage("Email invalide");
       return;
     }
 
-    const res = await fetch("/api/auth/login", {
+    if (password.length < 4) {
+      setMessage("Mot de passe trop court");
+      return;
+    }
+
+    const res = await fetch("/api/auth/register", {
       method: "POST",
       body: JSON.stringify({ email, password }),
     });
 
     const data = await res.json();
-
-    if (data.message) {
-      login();
-      router.push("/");
-    } else {
-      setMessage(data.error);
-    }
+    setMessage(data.error || data.message);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black text-white">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-gray-900 p-8 rounded-xl w-full max-w-md flex flex-col gap-4 border border-purple-500"
-      >
-        <h1 className="text-2xl text-center text-purple-400">Connexion</h1>
+      <form className="bg-gray-900 p-8 rounded-xl w-full max-w-md flex flex-col gap-4">
+        <h1 className="text-2xl text-center text-purple-400">Inscription</h1>
 
         <input
           placeholder="Email"
@@ -54,8 +47,8 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="bg-purple-600 py-2">
-          Se connecter
+        <button onClick={handleSubmit} className="bg-purple-600 py-2">
+          S’inscrire
         </button>
 
         {message && <p className="text-red-400 text-center">{message}</p>}
