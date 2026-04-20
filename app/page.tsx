@@ -45,7 +45,7 @@ export default function Home() {
         </p>
 
         <h1 className="text-5xl font-bold mb-4">
-          Abdoul Wahab Maïga
+          Abdoul Wahab Idrissa Maïga
         </h1>
 
         <p className="max-w-xl text-lg mb-6 text-gray-300">
