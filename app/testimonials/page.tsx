@@ -22,6 +22,12 @@ export default function TestimonialsPage() {
 
   return (
     <div className="main-bg p-8 text-white">
+
+      {/* 🔙 BOUTON RETOUR */}
+      <Link href="/" className="inline-block mb-6 px-4 py-2 bg-white text-black rounded">
+        ← Retour
+      </Link>
+
       <h1 className="text-3xl font-bold mb-6">Témoignages</h1>
 
       <Link
@@ -48,6 +54,7 @@ export default function TestimonialsPage() {
             >
               Supprimer
             </button>
+
           </div>
         ))}
       </div>

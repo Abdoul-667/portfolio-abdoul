@@ -10,11 +10,23 @@ export default function ProjectsPage() {
     },
     {
       title: "Anime Streaming Website",
-      description: "Catalogue d’anime interactif",
+      description: "Catalogue d’anime interactif avec navigation fluide",
     },
     {
       title: "Gestionnaire de bibliothèque",
-      description: "Application C# console",
+      description: "Application en C# pour gérer des livres",
+    },
+    {
+      title: "Fortivia Bank",
+      description: "Application bancaire web avec gestion de comptes, transactions et sécurité",
+    },
+    {
+      title: "MaliEats",
+      description: "Application de livraison de nourriture inspirée d'Uber Eats",
+    },
+    {
+      title: "Daily Quotes App",
+      description: "Application Android affichant des citations motivantes quotidiennes",
     },
   ];
 
