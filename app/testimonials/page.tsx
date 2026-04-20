@@ -3,13 +3,25 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+type Testimonial = {
+  id: number;
+  name: string;
+  message: string;
+};
+
 export default function TestimonialsPage() {
-  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [newMessage, setNewMessage] = useState("");
+
+  const loadTestimonials = async () => {
+    const res = await fetch("/api/testimonials");
+    const data = await res.json();
+    setTestimonials(data);
+  };
 
   useEffect(() => {
-    fetch("/api/testimonials")
-      .then(res => res.json())
-      .then(data => setTestimonials(data));
+    loadTestimonials();
   }, []);
 
   const handleDelete = async (id: number) => {
@@ -17,14 +29,38 @@ export default function TestimonialsPage() {
       method: "DELETE",
     });
 
-    setTestimonials(testimonials.filter(t => t.id !== id));
+    setTestimonials((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  const handleEdit = (id: number, message: string) => {
+    setEditingId(id);
+    setNewMessage(message);
+  };
+
+  const handleSave = async (id: number) => {
+    await fetch("/api/testimonials", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, message: newMessage }),
+    });
+
+    setTestimonials((prev) =>
+      prev.map((t) =>
+        t.id === id ? { ...t, message: newMessage } : t
+      )
+    );
+
+    setEditingId(null);
   };
 
   return (
-    <div className="main-bg p-8 text-white">
-
-      {/* 🔙 BOUTON RETOUR */}
-      <Link href="/" className="inline-block mb-6 px-4 py-2 bg-white text-black rounded">
+    <div className="main-bg min-h-screen p-8 text-white">
+      <Link
+        href="/"
+        className="inline-block mb-6 px-4 py-2 bg-white text-black rounded"
+      >
         ← Retour
       </Link>
 
@@ -41,20 +77,46 @@ export default function TestimonialsPage() {
         {testimonials.map((t) => (
           <div
             key={t.id}
-            className="bg-white text-black p-4 rounded-lg flex justify-between items-center"
+            className="bg-white text-black p-4 rounded-lg"
           >
-            <div>
-              <p className="font-bold">{t.name}</p>
-              <p>{t.message}</p>
-            </div>
+            <p className="font-bold">{t.name}</p>
 
-            <button
-              onClick={() => handleDelete(t.id)}
-              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-            >
-              Supprimer
-            </button>
+            {editingId === t.id ? (
+              <>
+                <input
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  className="border p-2 w-full mt-2 mb-2"
+                />
 
+                <button
+                  onClick={() => handleSave(t.id)}
+                  className="bg-green-500 text-white px-3 py-1 rounded"
+                >
+                  Enregistrer
+                </button>
+              </>
+            ) : (
+              <>
+                <p className="mt-1">{t.message}</p>
+
+                <div className="flex gap-2 mt-2">
+                  <button
+                    onClick={() => handleEdit(t.id, t.message)}
+                    className="bg-yellow-500 px-3 py-1 rounded"
+                  >
+                    Modifier
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(t.id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded"
+                  >
+                    Supprimer
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         ))}
       </div>
