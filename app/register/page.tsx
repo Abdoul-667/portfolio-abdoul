@@ -10,18 +10,11 @@ export default function RegisterPage() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    if (!email.includes("@")) {
-      setMessage("Email invalide");
-      return;
-    }
-
-    if (password.length < 4) {
-      setMessage("Mot de passe trop court");
-      return;
-    }
-
     const res = await fetch("/api/auth/register", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ email, password }),
     });
 
@@ -30,28 +23,38 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-white">
-      <form className="bg-gray-900 p-8 rounded-xl w-full max-w-md flex flex-col gap-4">
-        <h1 className="text-2xl text-center text-purple-400">Inscription</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#4c1d95]">
+
+      <form
+        onSubmit={handleSubmit}
+        className="w-[500px] bg-white rounded-2xl shadow-2xl p-10 flex flex-col gap-5"
+      >
+        <h1 className="text-2xl font-bold text-center text-black">
+          Inscription
+        </h1>
 
         <input
           placeholder="Email"
-          className="p-2 bg-black border border-gray-700"
+          className="p-3 border border-gray-300 rounded text-black"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
-          placeholder="Mot de passe"
           type="password"
-          className="p-2 bg-black border border-gray-700"
+          placeholder="Mot de passe"
+          className="p-3 border border-gray-300 rounded text-black"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button onClick={handleSubmit} className="bg-purple-600 py-2">
-          S’inscrire
+        <button className="bg-[#1e1b4b] text-white py-4 rounded font-semibold text-lg">
+          Créer un compte
         </button>
 
-        {message && <p className="text-red-400 text-center">{message}</p>}
+        {message && (
+          <p className="text-red-500 text-center">{message}</p>
+        )}
       </form>
     </div>
   );

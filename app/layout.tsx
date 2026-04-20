@@ -1,10 +1,5 @@
-"use client";
-
 import "./globals.css";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import { Provider } from "react-redux";
-import { store } from "./store";
+import LayoutShell from "./components/LayoutShell";
 
 export default function RootLayout({
   children,
@@ -13,12 +8,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body className="bg-black text-white flex flex-col min-h-screen">
-        <Provider store={store}>
-          <Navbar />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-        </Provider>
+      <body>
+        <LayoutShell>{children}</LayoutShell>
       </body>
     </html>
   );
