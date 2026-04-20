@@ -1,11 +1,10 @@
+"use client";
+
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-
-export const metadata = {
-  title: "Portfolio Abdoul",
-  description: "Portfolio de Abdoul Wahab Maïga",
-};
+import { Provider } from "react-redux";
+import { store } from "./store";
 
 export default function RootLayout({
   children,
@@ -15,9 +14,11 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className="bg-black text-white flex flex-col min-h-screen">
-        <Navbar />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <Provider store={store}>
+          <Navbar />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </Provider>
       </body>
     </html>
   );
