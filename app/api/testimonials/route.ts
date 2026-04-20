@@ -29,3 +29,11 @@ export async function PUT(req: Request) {
 
   return Response.json({ message: "Modifié" });
 }
+
+export async function DELETE(req: Request) {
+  const { id } = await req.json();
+
+  testimonials = testimonials.filter(t => t.id !== id);
+
+  return Response.json({ message: "Supprimé" });
+}
