@@ -1,41 +1,69 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import BackButton from "../../components/BackButton";
+import Link from "next/link";
 
-type Project = {
-  id: number;
-  title: string;
-  description: string;
-};
+const projects = [
+  {
+    id: "1",
+    title: "Technology Catalog Website",
+    description: "Site web dynamique avec Node.js et SQL",
+    tech: ["Node.js", "SQL"],
+  },
+  {
+    id: "2",
+    title: "Anime Streaming Website",
+    description: "Catalogue d’anime interactif",
+    tech: ["HTML", "JS"],
+  },
+  {
+    id: "3",
+    title: "Gestionnaire de bibliothèque",
+    description: "Application en C#",
+    tech: ["C#", ".NET"],
+  },
+  {
+    id: "4",
+    title: "Fortivia Bank",
+    description: "Application bancaire complète",
+    tech: ["Node.js", "PostgreSQL"],
+  },
+  {
+    id: "5",
+    title: "MaliEats",
+    description: "App de livraison",
+    tech: ["JS", "Express"],
+  },
+  {
+    id: "6",
+    title: "Daily Quotes App",
+    description: "App Android de citations",
+    tech: ["Java", "Android"],
+  },
+];
 
-export default function ProjectDetailPage() {
-  const params = useParams();
-  const [project, setProject] = useState<Project | null>(null);
+export default function ProjectDetails() {
+  const { id } = useParams();
+  const project = projects.find(p => p.id === id);
 
-  useEffect(() => {
-    fetch("/api/projects")
-      .then((res) => res.json())
-      .then((data: Project[]) => {
-        const found = data.find((p) => p.id.toString() === params.id);
-        setProject(found || null);
-      });
-  }, [params.id]);
-
-  if (!project) return <div className="p-6">Chargement...</div>;
+  if (!project) return <div>Projet non trouvé</div>;
 
   return (
-    <div className="p-6">
-      <BackButton />
+    <div className="main-bg p-8 text-white">
+      <Link href="/projects" className="bg-white text-black px-4 py-2 rounded">
+        ← Retour
+      </Link>
 
-      <h1 className="text-3xl font-bold mb-4">{project.title}</h1>
+      <h1 className="text-3xl font-bold mt-4">{project.title}</h1>
 
-      <p className="text-gray-400 mb-4">{project.description}</p>
+      <p className="mt-4">{project.description}</p>
 
-      <p className="text-sm text-gray-500">
-        Technologies : JavaScript, Node.js, SQL
-      </p>
+      <h2 className="mt-4 font-bold">Technologies :</h2>
+      <ul>
+        {project.tech.map((t, i) => (
+          <li key={i}>- {t}</li>
+        ))}
+      </ul>
     </div>
   );
 }

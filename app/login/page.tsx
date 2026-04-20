@@ -13,6 +13,11 @@ export default function LoginPage() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
+    if (!email || !password) {
+      setMessage("Tous les champs sont requis");
+      return;
+    }
+
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: {
@@ -27,12 +32,12 @@ export default function LoginPage() {
       login();
       router.push("/");
     } else {
-      setMessage(data.error || "Erreur");
+      setMessage(data.error || "Identifiants incorrects");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#4c1d95]">
+    <div className="min-h-screen flex items-center justify-center main-bg">
 
       <form
         onSubmit={handleSubmit}
@@ -57,7 +62,7 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="bg-[#1e1b4b] text-white py-4 rounded font-semibold text-lg">
+        <button className="bg-[#1e1b4b] text-white py-4 rounded font-semibold">
           Se connecter
         </button>
 
