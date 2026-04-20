@@ -8,25 +8,22 @@ import { isAuthenticated, logout } from "../utils/auth";
 export default function Navbar() {
   const router = useRouter();
   const [auth, setAuth] = useState(false);
-  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     setAuth(isAuthenticated());
-    setReady(true);
   }, []);
 
   const handleLogout = () => {
     logout();
+    setAuth(false);
     router.push("/login");
   };
 
-  if (!ready) return null;
-
   return (
-    <nav className="w-full flex justify-between items-center px-6 py-4 bg-black text-white border-b border-gray-800">
+    <nav className="w-full flex justify-between items-center px-6 py-4 bg-black text-white border-b border-white/10">
       <h1 className="font-bold text-lg">Abdoul</h1>
 
-      <div className="flex gap-6 items-center">
+      <div className="flex gap-6 items-center text-sm md:text-base">
         <Link href="/">Accueil</Link>
         <Link href="/projects">Projets</Link>
         <Link href="/testimonials">Témoignages</Link>
