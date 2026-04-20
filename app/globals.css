@@ -32,3 +32,13 @@ body {
   background: linear-gradient(135deg, #0f172a, #1e1b4b, #4c1d95);
   color: white;
 }
+/* Background principal du site */
+.main-bg {
+  background: linear-gradient(
+    135deg,
+    #0f172a 0%,   /* bleu très sombre */
+    #1e1b4b 50%,  /* bleu nuit */
+    #4c1d95 100%  /* violet foncé */
+  );
+  min-height: 100vh;
+}

@@ -1,75 +1,42 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function TestimonialsPage() {
   const [testimonials, setTestimonials] = useState<any[]>([]);
-  const [name, setName] = useState("");
-  const [message, setMessage] = useState("");
-
-  const loadTestimonials = async () => {
-    const res = await fetch("/api/testimonials");
-    const data = await res.json();
-    setTestimonials(data);
-  };
 
   useEffect(() => {
-    loadTestimonials();
+    fetch("/api/testimonials")
+      .then(res => res.json())
+      .then(data => setTestimonials(data));
   }, []);
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-
-    await fetch("/api/testimonials", {
-      method: "POST",
-      body: JSON.stringify({ name, message }),
-    });
-
-    setName("");
-    setMessage("");
-    loadTestimonials();
-  };
-
   const handleDelete = async (id: number) => {
-    await fetch("/api/testimonials", {
+    await fetch(`/api/testimonials?id=${id}`, {
       method: "DELETE",
-      body: JSON.stringify({ id }),
     });
 
-    loadTestimonials();
+    setTestimonials(testimonials.filter(t => t.id !== id));
   };
 
   return (
-    <div className="min-h-screen p-10">
-
+    <div className="main-bg p-8 text-white">
       <h1 className="text-3xl font-bold mb-6">Témoignages</h1>
 
-      {/* FORM */}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-8">
-        <input
-          placeholder="Nom"
-          className="p-3 text-black rounded"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+      <Link
+        href="/testimonials/add"
+        className="inline-block mb-6 px-4 py-2 bg-purple-600 rounded hover:bg-purple-700"
+      >
+        Ajouter un témoignage
+      </Link>
 
-        <input
-          placeholder="Message"
-          className="p-3 text-black rounded"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-
-        <button className="bg-indigo-600 px-4 py-2 rounded">
-          Ajouter
-        </button>
-      </form>
-
-      {/* LISTE */}
-      <div className="flex flex-col gap-4">
+      <div className="space-y-4">
         {testimonials.map((t) => (
-          <div key={t.id} className="bg-white text-black p-4 rounded flex justify-between items-center">
-
+          <div
+            key={t.id}
+            className="bg-white text-black p-4 rounded-lg flex justify-between items-center"
+          >
             <div>
               <p className="font-bold">{t.name}</p>
               <p>{t.message}</p>
@@ -77,15 +44,13 @@ export default function TestimonialsPage() {
 
             <button
               onClick={() => handleDelete(t.id)}
-              className="text-red-500 font-bold"
+              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
             >
               Supprimer
             </button>
-
           </div>
         ))}
       </div>
-
     </div>
   );
 }
